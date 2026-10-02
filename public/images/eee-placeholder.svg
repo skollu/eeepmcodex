@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">EEE Property Management image placeholder</title>
+  <desc id="desc">Placeholder for real EEE team or managed property photography.</desc>
+  <rect width="1600" height="1000" fill="#eef3ef"/>
+  <path d="M0 760C220 670 376 720 546 628c190-103 327-258 547-201 151 40 267 167 507 94v479H0z" fill="#d9ded8"/>
+  <rect x="270" y="250" width="1060" height="520" rx="8" fill="#f7f3ea" stroke="#789781" stroke-width="6"/>
+  <path d="M438 628V430l362-170 362 170v198" fill="none" stroke="#1f4d3a" stroke-width="28" stroke-linejoin="round"/>
+  <path d="M600 626V478h400v148" fill="none" stroke="#c49b45" stroke-width="24"/>
+  <text x="800" y="835" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#17231f">Real EEE team / managed property photo needed</text>
+</svg>
