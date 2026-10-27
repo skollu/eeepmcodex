@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { isDuplicateSubmission, notifyLead, requireFields, sanitize, storeLead, validEmail } from "@/lib/forms";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { leadSubmissionsEnabled } from "@/lib/lead-storage";
 
 export async function POST(request: Request) {
+  if (!leadSubmissionsEnabled()) return NextResponse.json({ error: "Online submissions are temporarily paused. Please call or email EEE." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   const ip = request.headers.get("x-forwarded-for") || "local";
   const rateLimit = await checkRateLimit(`rental:${ip}`, 5, 60);
   if (!rateLimit.allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -34,9 +36,15 @@ export async function POST(request: Request) {
   const duplicateKey = `rental:${payload.email}:${payload.propertyAddress}`;
   if (isDuplicateSubmission(duplicateKey)) return NextResponse.json({ error: "This request was already received recently." }, { status: 409 });
 
-  const stored = await storeLead("rental-estimate", payload);
+  let stored;
+  try {
+    stored = await storeLead("rental-estimate", payload);
+  } catch {
+    console.error("Rental lead storage failed; submission not accepted.");
+    return NextResponse.json({ error: "Your inquiry could not be saved. Please call or email EEE." }, { status: 503 });
+  }
   const email = await notifyLead("rental-estimate", "EEE rental estimate request", payload);
-  if (!email.delivered) console.error("Lead email notification failed after storage.", email);
+  if (!email.delivered) console.error("Lead email notification failed after storage.");
 
   return NextResponse.json({ ok: true, stored: stored.stored, emailDelivered: email.delivered });
 }

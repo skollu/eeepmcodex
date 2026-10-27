@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { isDuplicateSubmission, notifyLead, requireFields, sanitize, storeLead, validEmail } from "@/lib/forms";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { leadSubmissionsEnabled } from "@/lib/lead-storage";
 
 export async function POST(request: Request) {
+  if (!leadSubmissionsEnabled()) return NextResponse.json({ error: "Online submissions are temporarily paused. Please call or email EEE." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   const ip = request.headers.get("x-forwarded-for") || "local";
   const rateLimit = await checkRateLimit(`contact:${ip}`, 5, 60);
   if (!rateLimit.allowed) return NextResponse.json({ error: "Too many requests" }, { status: 429 });
@@ -26,9 +28,15 @@ export async function POST(request: Request) {
   const duplicateKey = `contact:${payload.email}:${payload.message.slice(0, 80)}`;
   if (isDuplicateSubmission(duplicateKey)) return NextResponse.json({ error: "This message was already received recently." }, { status: 409 });
 
-  const stored = await storeLead("contact", payload);
+  let stored;
+  try {
+    stored = await storeLead("contact", payload);
+  } catch {
+    console.error("Contact lead storage failed; submission not accepted.");
+    return NextResponse.json({ error: "Your inquiry could not be saved. Please call or email EEE." }, { status: 503 });
+  }
   const email = await notifyLead("contact", "EEE contact form inquiry", payload);
-  if (!email.delivered) console.error("Lead email notification failed after storage.", email);
+  if (!email.delivered) console.error("Lead email notification failed after storage.");
 
   return NextResponse.json({ ok: true, stored: stored.stored, emailDelivered: email.delivered });
 }

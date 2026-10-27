@@ -1,5 +1,5 @@
 import { notifyTeam } from "@/lib/email";
-import { hasSanityWriteConfig, sanityWriteClient } from "@/lib/sanity";
+import { writePrivateLead } from "@/lib/lead-storage";
 
 const duplicateSubmissions = new Map<string, number>();
 
@@ -27,11 +27,6 @@ export function validEmail(email: string) {
 export const notifyLead = notifyTeam;
 
 export async function storeLead(source: "rental-estimate" | "contact", payload: LeadPayload) {
-  if (!hasSanityWriteConfig) {
-    console.info("Lead not stored because Sanity write credentials are not configured.", source);
-    return { stored: false, reason: "missing SANITY_API_WRITE_TOKEN" };
-  }
-
   const document = {
     _type: "leadSubmission",
     source,
@@ -55,6 +50,5 @@ export async function storeLead(source: "rental-estimate" | "contact", payload: 
     consent: Boolean(payload.consent)
   };
 
-  await sanityWriteClient.create(document);
-  return { stored: true };
+  return writePrivateLead(document);
 }

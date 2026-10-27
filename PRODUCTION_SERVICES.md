@@ -1,5 +1,35 @@
 # Production Services Configuration
 
+## Emergency lead privacy containment (October 26, 2026)
+
+This section supersedes the older lead persistence instructions below. Do not use
+SANITY_API_WRITE_TOKEN or the public production dataset to store leads.
+Both APIs now default to HTTP 503 before reading submission data; public forms
+show phone/email contact options. LEAD_SUBMISSIONS_ENABLED must remain false
+until a private destination and deployed verification are approved.
+
+Prepared server-only storage configuration:
+
+- SANITY_LEADS_PROJECT_ID
+- SANITY_LEADS_DATASET (a separate private dataset, never the public content dataset)
+- SANITY_LEADS_WRITE_TOKEN (least privilege; never NEXT_PUBLIC_)
+
+The writer verifies authenticated dataset metadata and anonymous access denial
+before every mutation. No metadata access, unknown privacy, readable anonymous
+endpoint, failed storage, or missing transaction acknowledgement means rejection.
+It has no public-dataset or email-only storage fallback. Provider errors and lead
+payloads are not logged by these submission handlers. Metadata verification may
+require permission beyond mutation access; verify the least-privilege role with
+Sanity rather than granting broad administrative tokens just to pass the check.
+
+The form UI stays paused even if the API environment flag is enabled. Reopening
+is a separate reviewed change after the private storage tests pass.
+Historical public lead records have not been removed, migrated, or protected by
+this code change. Dataset-level containment is still required in Sanity.
+
+Run `node scripts/test-lead-privacy.cjs` for isolated mocked regression checks.
+These checks do not prove deployed privacy, actual storage, or inbox delivery.
+
 This project is prepared for production service configuration, but no production deployment has been performed.
 
 ## Sanity

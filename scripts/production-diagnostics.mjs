@@ -2,7 +2,9 @@ const checks = [
   ["Sanity project ID", "NEXT_PUBLIC_SANITY_PROJECT_ID", false],
   ["Sanity dataset", "NEXT_PUBLIC_SANITY_DATASET", false],
   ["Sanity read token", "SANITY_API_READ_TOKEN", true],
-  ["Sanity write token", "SANITY_API_WRITE_TOKEN", true],
+  ["Private lead project", "SANITY_LEADS_PROJECT_ID", true],
+  ["Private lead dataset", "SANITY_LEADS_DATASET", true],
+  ["Private lead write token", "SANITY_LEADS_WRITE_TOKEN", true],
   ["Lead notification email", "LEAD_NOTIFICATION_EMAIL", false],
   ["Resend API key", "RESEND_API_KEY", true],
   ["Resend sender", "RESEND_FROM_EMAIL", false],
@@ -14,6 +16,8 @@ const checks = [
 
 console.log("EEE Production Configuration Diagnostics");
 console.log("No secret values are printed.\n");
+console.log(process.env.LEAD_SUBMISSIONS_ENABLED === "true" ? "Lead API gate enabled: private destination must pass runtime verification." : "Lead APIs paused (safe default).");
+console.log("Public form UI remains paused until a separately reviewed reopening change.");
 
 for (const [label, key, secret] of checks) {
   const configured = Boolean(process.env[key]);

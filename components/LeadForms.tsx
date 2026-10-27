@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
+import { settings } from "@/lib/content";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -25,30 +26,41 @@ function SelectField({ label, name, options }: { label: string; name: string; op
   );
 }
 
-export function LeadForm({ kind }: { kind: "rental-estimate" | "contact" }) {
+export function LeadForm({ kind, enabled = false }: { kind: "rental-estimate" | "contact"; enabled?: boolean }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const isRental = kind === "rental-estimate";
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "submitting" || status === "success") return;
+    if (!enabled || status === "submitting" || status === "success") return;
     setStatus("submitting");
     setErrorMessage("");
     if (isRental) trackEvent("rental_estimate_started");
     const form = event.currentTarget;
     const response = await fetch(`/api/${kind}`, { method: "POST", body: new FormData(form) });
-    if (response.ok) {
+    const payload = await response.json().catch(() => null);
+    if (response.ok && payload?.ok === true && payload?.stored === true) {
       setStatus("success");
       trackEvent(isRental ? "rental_estimate_submitted" : "contact_form_submitted");
       if (isRental) window.location.href = "/thank-you/rental-estimate";
       else form.reset();
       return;
     }
-    const payload = await response.json().catch(() => null);
     setErrorMessage(payload?.error || "Something went wrong. Please try again or call 206.771.9992.");
     setStatus("error");
   }
+
+  if (!enabled) return (
+    <div className="rounded-md border border-brand-line bg-white p-5 shadow-card md:p-6" role="status">
+      <h2 className="text-2xl font-semibold text-brand-ink">Contact EEE Directly</h2>
+      <p className="mt-3 leading-7 text-brand-muted">Online submissions are temporarily paused. Please call or email EEE about your inquiry.</p>
+      <div className="mt-5 flex flex-wrap gap-4">
+        <a className="font-semibold text-brand-forest underline" href={settings.phoneHref}>Call {settings.phone}</a>
+        <a className="font-semibold text-brand-forest underline" href={settings.emailHref}>Email {settings.email}</a>
+      </div>
+    </div>
+  );
 
   return (
     <form onSubmit={submit} className="grid gap-5 rounded-md border border-brand-line bg-white p-5 shadow-card md:p-6" noValidate={false}>
