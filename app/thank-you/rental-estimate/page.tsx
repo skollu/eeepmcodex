@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { Section } from "@/components/Section";
-import { settings } from "@/lib/content";
+import { getSiteData } from "@/lib/cms";
+import { canonicalUrl } from "@/lib/indexing";
 
-export default function RentalEstimateThanksPage() {
+export const metadata = { title: "Rental Estimate Contact", description: "Contact EEE Property Management about your rental estimate.", alternates: { canonical: canonicalUrl("/thank-you/rental-estimate") }, robots: { index: false, follow: false } };
+
+export default async function RentalEstimateThanksPage() {
+  const { settings } = await getSiteData();
   return (
-    <Section title="Thanks — We've Received Your Property Information">
-      <p className="max-w-2xl text-lg leading-8 text-brand-muted">We've received your request and a member of EEE Property Management will review the information you've provided.</p>
+    <Section headingLevel={1} title="Contact EEE About Your Rental Estimate">
+      <p className="max-w-2xl text-lg leading-8 text-brand-muted">Online submissions are temporarily paused. Please call or email EEE about your inquiry.</p>
+      <p className="mt-4"><Link className="font-semibold text-brand-forest underline" href={settings.emailHref}>{settings.email}</Link></p>
       <p className="mt-5 text-lg leading-8 text-brand-muted">If you'd prefer to speak with us directly, call <Link className="font-semibold text-brand-forest underline" href={settings.phoneHref}>{settings.phone}</Link>.</p>
     </Section>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { FAQ } from "@/components/FAQ";
+import { PublishedFAQs } from "@/components/PublishedContent";
+import { PageExtras } from "@/components/PageExtras";
 import { Section } from "@/components/Section";
 import { faqs } from "@/lib/content";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
@@ -7,6 +8,7 @@ import { getCmsPage, pageMetadata } from "@/lib/pages";
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getCmsPage("owner-faq");
   return pageMetadata(page, {
+    path: "/owner-faq",
     title: "Owner FAQ",
     description: "Property management questions answered for Greater Seattle rental property owners."
   });
@@ -30,13 +32,15 @@ export default async function OwnerFaqPage() {
   const cmsPage = await getCmsPage("owner-faq");
 
   return (
-    <Section title={cmsPage?.heroHeadline || "Property Management Questions, Answered"}>
+    <Section headingLevel={1} title={cmsPage?.heroHeadline || "Property Management Questions, Answered"}>
+      {cmsPage?.heroBody && <p className="mb-4 leading-8 text-brand-muted">{cmsPage.heroBody}</p>}
+      <PageExtras page={cmsPage} />
       <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {["Getting Started", "Management Services", "Applicant Screening", "Maintenance", "Pricing", "Remote Ownership", "Switching Managers", "Communication", "Leasing"].map((category) => (
           <div className="rounded-md border border-brand-line bg-white p-4 text-sm font-semibold text-brand-forest" key={category}>{category}</div>
         ))}
       </div>
-      <FAQ items={[...faqs, ...moreFaqs]} />
+      <PublishedFAQs page="owner-faq" fallback={[...faqs, ...moreFaqs]} />
     </Section>
   );
 }

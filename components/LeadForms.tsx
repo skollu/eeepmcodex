@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { trackEvent } from "@/lib/analytics";
-import { settings } from "@/lib/content";
+import { useSiteData } from "@/components/SiteSettingsProvider";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -27,6 +27,7 @@ function SelectField({ label, name, options }: { label: string; name: string; op
 }
 
 export function LeadForm({ kind, enabled = false }: { kind: "rental-estimate" | "contact"; enabled?: boolean }) {
+  const { settings } = useSiteData();
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const isRental = kind === "rental-estimate";
@@ -38,17 +39,22 @@ export function LeadForm({ kind, enabled = false }: { kind: "rental-estimate" | 
     setErrorMessage("");
     if (isRental) trackEvent("rental_estimate_started");
     const form = event.currentTarget;
-    const response = await fetch(`/api/${kind}`, { method: "POST", body: new FormData(form) });
-    const payload = await response.json().catch(() => null);
-    if (response.ok && payload?.ok === true && payload?.stored === true) {
-      setStatus("success");
-      trackEvent(isRental ? "rental_estimate_submitted" : "contact_form_submitted");
-      if (isRental) window.location.href = "/thank-you/rental-estimate";
-      else form.reset();
-      return;
+    try {
+      const response = await fetch(`/api/${kind}`, { method: "POST", body: new FormData(form) });
+      const payload = await response.json().catch(() => null);
+      if (response.ok && payload?.ok === true && payload?.stored === true) {
+        setStatus("success");
+        trackEvent(isRental ? "rental_estimate_submitted" : "contact_form_submitted");
+        if (isRental) window.location.href = "/thank-you/rental-estimate";
+        else form.reset();
+        return;
+      }
+      setErrorMessage(payload?.error || `Something went wrong. Please try again or call ${settings.phone}.`);
+      setStatus("error");
+    } catch {
+      setErrorMessage("We could not confirm your submission. Please call or email EEE before trying again.");
+      setStatus("error");
     }
-    setErrorMessage(payload?.error || "Something went wrong. Please try again or call 206.771.9992.");
-    setStatus("error");
   }
 
   if (!enabled) return (
@@ -64,7 +70,7 @@ export function LeadForm({ kind, enabled = false }: { kind: "rental-estimate" | 
 
   return (
     <form onSubmit={submit} className="grid gap-5 rounded-md border border-brand-line bg-white p-5 shadow-card md:p-6" noValidate={false}>
-      <label className="sr-only">
+      <label hidden aria-hidden="true">
         Company
         <input name="company" tabIndex={-1} autoComplete="off" />
       </label>

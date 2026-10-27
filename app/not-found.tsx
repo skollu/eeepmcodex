@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ButtonLink";
-import { settings } from "@/lib/content";
+import { getSiteData } from "@/lib/cms";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const { settings } = await getSiteData();
   return (
     <section className="mx-auto max-w-4xl px-6 py-24 text-center">
       <p className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-brand-gold">404</p>

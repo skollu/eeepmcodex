@@ -10,6 +10,6 @@ export const faq = defineType({
     defineField({ name: "category", type: "string", options: { list: ["Getting Started", "Management Services", "Applicant Screening", "Maintenance", "Pricing", "Remote Ownership", "Switching Managers", "Communication", "Leasing"] } }),
     defineField({ name: "relatedPage", type: "reference", to: [{ type: "page" }] }),
     defineField({ name: "displayOrder", type: "number" }),
-    defineField({ name: "published", type: "boolean", initialValue: false })
+    defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable and Publish to show this FAQ. Publish with this off to hide it." })
   ]
 });

@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { LeadForm } from "@/components/LeadForms";
 import { Section } from "@/components/Section";
 import { TrackedLink } from "@/components/TrackedLink";
-import { settings } from "@/lib/content";
+import { getSiteData } from "@/lib/cms";
+import { PageExtras } from "@/components/PageExtras";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getCmsPage("contact");
   return pageMetadata(page, {
+    path: "/contact",
     title: "Contact",
     description: "Talk with EEE Property Management about rental estimates, property management, switching managers, or owner questions."
   });
@@ -15,12 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const cmsPage = await getCmsPage("contact");
+  const { settings } = await getSiteData();
 
   return (
-    <Section title={cmsPage?.heroHeadline || "Talk With a Local Property Manager"}>
+    <Section headingLevel={1} title={cmsPage?.heroHeadline || "Talk With a Local Property Manager"}>
+      <PageExtras page={cmsPage} />
       <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="text-lg leading-8 text-brand-muted">Whether you're renting your first property, managing investments remotely or considering a change from your current property-management company, EEE is here to help.</p>
+          <p className="text-lg leading-8 text-brand-muted">{cmsPage?.heroBody || "Whether you're renting your first property, managing investments remotely or considering a change from your current property-management company, EEE is here to help."}</p>
           <div className="mt-8 grid gap-4">
             <ContactCard title="Call" href={settings.phoneHref} label={settings.phone} />
             <ContactCard title="Email" href={settings.emailHref} label={settings.email} />

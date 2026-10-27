@@ -16,7 +16,7 @@ export default function AdminPage() {
           <ul className="mt-6 space-y-3 leading-7 text-brand-muted">
             <li>Add <code className="rounded bg-brand-mist px-1 py-0.5">NEXT_PUBLIC_SANITY_PROJECT_ID</code>.</li>
             <li>Add <code className="rounded bg-brand-mist px-1 py-0.5">NEXT_PUBLIC_SANITY_DATASET</code>.</li>
-            <li>Add the server-side Sanity write token in your deployment environment for lead retention.</li>
+            <li>Public lead submissions remain paused until separate private storage is verified.</li>
             <li>Configure Sanity CORS/origins for local preview and production domains.</li>
           </ul>
         </div>
@@ -24,5 +24,9 @@ export default function AdminPage() {
     );
   }
 
-  return <NextStudio config={config} />;
+  return (
+    <div className="h-dvh">
+      <NextStudio config={config} />
+    </div>
+  );
 }

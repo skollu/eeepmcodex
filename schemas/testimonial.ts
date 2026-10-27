@@ -5,6 +5,7 @@ export const testimonial = defineType({
   title: "Testimonial",
   type: "document",
   fields: [
+    defineField({ name: "approvedForWebsite", title: "Owner Approved for Website", type: "boolean", initialValue: false, description: "Enable only after EEE approves the quote, attribution, and publication permission. Required in addition to Publish." }),
     defineField({ name: "text", title: "Quote", type: "text", description: "Use only real customer-provided testimonials. Do not invent quotes.", validation: (Rule) => Rule.required() }),
     defineField({ name: "customerDisplayName", type: "string" }),
     defineField({ name: "city", title: "City / Location", type: "string" }),
@@ -13,6 +14,6 @@ export const testimonial = defineType({
     defineField({ name: "source", type: "string" }),
     defineField({ name: "featured", type: "boolean", initialValue: false }),
     defineField({ name: "displayOrder", type: "number" }),
-    defineField({ name: "published", type: "boolean", initialValue: false })
+    defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable and Publish after owner approval. Both visibility and approval are required." })
   ]
 });

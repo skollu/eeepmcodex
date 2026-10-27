@@ -1,5 +1,9 @@
 import type { MetadataRoute } from "next";
-import { blogPosts, settings } from "@/lib/content";
+import { settings } from "@/lib/content";
+import { getBlogPosts } from "@/lib/blog";
+import { getCmsPage } from "@/lib/pages";
+
+export const dynamic = "force-dynamic";
 
 const routes = [
   "",
@@ -13,19 +17,19 @@ const routes = [
   "/privacy",
   "/accessibility",
   "/fair-housing",
-  "/terms",
-  "/thank-you/rental-estimate"
+  "/terms"
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getBlogPosts();
+  const visible = await Promise.all(routes.map(async route => ({ route, page: await getCmsPage(route.slice(1) || "home") })));
   return [
-    ...routes.map((route) => ({
+    ...visible.filter(({ page }) => !page?.noIndex).map(({ route }) => ({
       url: `${settings.siteUrl}${route}`,
-      lastModified: new Date()
     })),
-    ...blogPosts.map((post) => ({
+    ...posts.map((post) => ({
       url: `${settings.siteUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.date)
+      lastModified: new Date(post.updatedDate || post.date)
     }))
   ];
 }

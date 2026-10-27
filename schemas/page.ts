@@ -19,6 +19,6 @@ export const page = defineType({
     defineField({ name: "canonicalUrl", type: "url" }),
     defineField({ name: "openGraphImage", type: "image", options: { hotspot: true } }),
     defineField({ name: "noIndex", title: "Noindex", type: "boolean", initialValue: false }),
-    defineField({ name: "published", type: "boolean", initialValue: false })
+    defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable and Publish to display this page's CMS content. Draft changes never appear publicly." })
   ]
 });

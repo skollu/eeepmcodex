@@ -3,13 +3,15 @@ import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { CardGrid, StatStrip } from "@/components/Cards";
-import { FAQ } from "@/components/FAQ";
+import { PublishedFAQs, PublishedTestimonials } from "@/components/PublishedContent";
+import { CmsContent } from "@/components/CmsContent";
 import { Hero } from "@/components/Hero";
 import { HandsOnApproach, ServiceBands, ValuesTriad } from "@/components/HomepageRefinements";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { ProcessTimeline } from "@/components/ProcessTimeline";
 import { Section } from "@/components/Section";
-import { faqs, settings, stats } from "@/lib/content";
+import { stats } from "@/lib/content";
+import { getSiteData } from "@/lib/cms";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
 
 const audiences: Array<[string, string]> = [
@@ -23,6 +25,7 @@ const process = ["Rental Evaluation", "Property Preparation", "Professional Mark
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getCmsPage("home");
   return pageMetadata(page, {
+    path: "/",
     title: "Greater Seattle Property Management",
     description: "Local, responsive, transparent property management for owners across King, Snohomish, and Pierce counties."
   });
@@ -30,14 +33,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const cmsPage = await getCmsPage("home");
+  const { settings } = await getSiteData();
 
   return (
     <>
       <Hero
+        primaryFromCms={!!cmsPage?.cta?.label && !!cmsPage.cta.destination}
+        image={cmsPage?.heroImage}
+        subheadline={cmsPage?.heroSubheadline}
         eyebrow="Local property management for Greater Seattle owners"
         title={cmsPage?.heroHeadline || "Property Management That Protects Your Investment and Your Peace of Mind"}
         body={cmsPage?.heroBody || "EEE Property Management helps homeowners across King, Snohomish, and Pierce counties rent and manage their properties with less stress, better communication, and responsive local support. Whether you live nearby or across the world, we help you handle the day-to-day responsibilities of your rental property with experienced local support."}
-        primary={{ label: "Get My Free Rental Estimate", href: "/rental-estimate" }}
+        primary={cmsPage?.cta?.label && cmsPage.cta.destination ? { label: cmsPage.cta.label, href: cmsPage.cta.destination } : { label: "Get My Free Rental Estimate", href: "/rental-estimate" }}
         secondary={{ label: "Call Us Today", href: settings.phoneHref }}
       />
       <section className="bg-white px-6 py-6">
@@ -67,8 +74,7 @@ export default async function HomePage() {
             <div className="mt-8">
               <PhotoPlaceholder
                 compact
-                label="Service photography needed"
-                requirement="Property manager conducting an in-person showing, inspection, or owner walkthrough at a real managed home."
+                slot="showingPhoto"
               />
             </div>
           </div>
@@ -87,8 +93,7 @@ export default async function HomePage() {
             <p>Our approach focuses on protecting the property, communicating clearly, addressing problems early and making ownership easier.</p>
             <PhotoPlaceholder
               compact
-              label="Founder photography needed"
-              requirement="Natural founder/team portrait at a Bellevue-area managed property or during an owner conversation."
+              slot="founderPhoto"
             />
           </div>
           <ValuesTriad />
@@ -116,9 +121,7 @@ export default async function HomePage() {
           </ButtonLink>
         </div>
       </Section>
-      <Section title="Property Management Questions" tone="mist">
-        <FAQ items={faqs} />
-      </Section>
+      <PublishedFAQs section />
       <Section title="Property Management Should Make Ownership Easier" tone="green">
         <p className="max-w-3xl text-lg leading-8 text-white/80">Whether you're preparing to rent your property, managing an investment from a distance or considering a change from your current management company, let's talk about what you need.</p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -128,6 +131,8 @@ export default async function HomePage() {
           </Link>
         </div>
       </Section>
+      {cmsPage?.body?.length ? <Section><CmsContent value={cmsPage.body} /></Section> : null}
+      <PublishedTestimonials />
     </>
   );
 }

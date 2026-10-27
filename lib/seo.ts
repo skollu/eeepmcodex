@@ -4,20 +4,20 @@ export function canonical(path = "") {
   return `${settings.siteUrl}${path}`;
 }
 
-export function organizationJsonLd() {
+export function organizationJsonLd(business = settings) {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: settings.company,
-    url: settings.siteUrl,
-    telephone: settings.phone,
-    email: settings.email,
+    name: business.company,
+    url: business.siteUrl,
+    telephone: business.phone,
+    email: business.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: `${settings.address.street} ${settings.address.suite}`,
-      addressLocality: settings.address.city,
-      addressRegion: settings.address.state,
-      postalCode: settings.address.zip,
+      streetAddress: `${business.address.street} ${business.address.suite}`,
+      addressLocality: business.address.city,
+      addressRegion: business.address.state,
+      postalCode: business.address.zip,
       addressCountry: "US"
     },
     areaServed: ["King County, WA", "Snohomish County, WA", "Pierce County, WA"]

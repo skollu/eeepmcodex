@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { hasSanityConfig, sanityClient } from "@/lib/sanity";
+import { cache } from "react";
+import { cmsFetch, getSiteData } from "@/lib/cms";
+import { canonicalUrl, stagingNoIndex } from "@/lib/indexing";
+import { imageUrl } from "@/lib/images";
+import { safeHref, type CmsImage } from "@/lib/site-types";
+import type { RichBlock } from "@/components/CmsContent";
 
 export type CmsPage = {
   title?: string;
@@ -10,12 +15,14 @@ export type CmsPage = {
   metaDescription?: string;
   canonicalUrl?: string;
   noIndex?: boolean;
+  heroImage?: CmsImage;
+  openGraphImage?: CmsImage;
+  body?: RichBlock[];
+  cta?: { label: string; destination: string };
 };
 
-export async function getCmsPage(slug: string): Promise<CmsPage | null> {
-  if (!hasSanityConfig) return null;
-
-  return sanityClient.fetch<CmsPage | null>(
+export const getCmsPage = cache(async (slug: string): Promise<CmsPage | null> => {
+  return cmsFetch<CmsPage>(
     `*[_type == "page" && published == true && slug.current == $slug][0]{
       title,
       heroHeadline,
@@ -24,22 +31,30 @@ export async function getCmsPage(slug: string): Promise<CmsPage | null> {
       seoTitle,
       metaDescription,
       canonicalUrl,
-      noIndex
+      noIndex, heroImage, openGraphImage, body, cta
     }`,
-    { slug },
-    { next: { revalidate: 60 } }
+    { slug }
   );
-}
+});
 
-export function pageMetadata(page: CmsPage | null, fallback: { title: string; description: string }): Metadata {
+export async function pageMetadata(page: CmsPage | null, fallback: { title: string; description: string; path: string }): Promise<Metadata> {
+  const { settings, seo } = await getSiteData();
+  const canonical = page?.canonicalUrl?.startsWith("https://") && safeHref(page.canonicalUrl) || canonicalUrl(fallback.path);
+  const socialImage = page?.openGraphImage || seo.defaultSocialImage || settings.defaultSeoImage;
+  const image = imageUrl(socialImage, 1400, false);
+  const globalTitle = fallback.path === "/" ? seo.defaultTitle : undefined;
+  const title = page?.seoTitle || globalTitle || fallback.title;
+  const description = page?.metaDescription || (fallback.path === "/" ? seo.defaultMetaDescription : undefined) || fallback.description;
   return {
-    title: page?.seoTitle || fallback.title,
-    description: page?.metaDescription || fallback.description,
-    alternates: page?.canonicalUrl ? { canonical: page.canonicalUrl } : undefined,
-    robots: page?.noIndex ? { index: false, follow: false } : undefined,
+    title: !page?.seoTitle && globalTitle ? { absolute: title } : title,
+    description,
+    alternates: { canonical },
+    robots: { index: !stagingNoIndex() && !page?.noIndex, follow: !stagingNoIndex() && !page?.noIndex },
     openGraph: {
-      title: page?.seoTitle || fallback.title,
-      description: page?.metaDescription || fallback.description
+      title,
+      description,
+      url: canonical,
+      images: image ? [{ url: image, alt: socialImage?.alt || settings.company }] : []
     }
   };
 }

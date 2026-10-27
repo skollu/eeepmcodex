@@ -5,6 +5,7 @@ export const blogPost = defineType({
   title: "Blog Post",
   type: "document",
   fields: [
+    defineField({ name: "approvedForWebsite", title: "Editorial Approval for Website", type: "boolean", initialValue: false, description: "Required alongside Published and Publish. Approve only completed articles, not starter/editor instructions." }),
     defineField({ name: "title", type: "string", validation: (Rule) => Rule.required().max(90) }),
     defineField({ name: "slug", type: "slug", options: { source: "title" }, validation: (Rule) => Rule.required() }),
     defineField({ name: "excerpt", type: "text", validation: (Rule) => Rule.max(180) }),
@@ -22,6 +23,6 @@ export const blogPost = defineType({
     defineField({ name: "metaDescription", type: "text", validation: (Rule) => Rule.max(160) }),
     defineField({ name: "canonicalUrl", type: "url" }),
     defineField({ name: "socialImage", type: "image", options: { hotspot: true } }),
-    defineField({ name: "published", type: "boolean", initialValue: false, description: "Only published posts appear on the public website." })
+    defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable with Editorial Approval, complete the article, then Publish. Draft changes never appear publicly." })
   ]
 });

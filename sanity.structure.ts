@@ -7,7 +7,12 @@ const pageItems = [
   ["Owner FAQ", "owner-faq"],
   ["Switching Property Managers", "switching-property-managers"],
   ["About", "about"],
-  ["Contact", "contact"]
+  ["Contact", "contact"],
+  ["Blog", "blog"],
+  ["Privacy", "privacy"],
+  ["Terms", "terms"],
+  ["Accessibility", "accessibility"],
+  ["Fair Housing", "fair-housing"]
 ] as const;
 
 export const structure: StructureResolver = (S) =>

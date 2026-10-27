@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { LeadForm } from "@/components/LeadForms";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { Section } from "@/components/Section";
-import { settings } from "@/lib/content";
+import { getSiteData } from "@/lib/cms";
+import { PageExtras } from "@/components/PageExtras";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getCmsPage("rental-estimate");
   return pageMetadata(page, {
+    path: "/rental-estimate",
     title: "Free Rental Estimate",
     description: "Request a free rental estimate from EEE Property Management for your Greater Seattle rental property."
   });
@@ -15,13 +17,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RentalEstimatePage() {
   const cmsPage = await getCmsPage("rental-estimate");
+  const { settings } = await getSiteData();
 
   return (
-    <Section eyebrow="Free rental estimate" title={cmsPage?.heroHeadline || "Find Out What Your Property Could Rent For"} tone="linen">
+    <Section headingLevel={1} eyebrow="Free rental estimate" title={cmsPage?.heroHeadline || "Find Out What Your Property Could Rent For"} tone="linen">
+      <PageExtras page={cmsPage ? { ...cmsPage, heroImage: undefined } : null} />
       <div className="grid gap-8 lg:grid-cols-[0.78fr_1.22fr]">
         <div className="order-2 space-y-5 lg:order-1">
           <div className="rounded-md border border-brand-line bg-white p-6 shadow-card">
-            <p className="text-lg leading-8 text-brand-muted">Get a free rental estimate from local property owners and managers with more than 30 years of combined experience in the Greater Seattle area.</p>
+            <p className="text-lg leading-8 text-brand-muted">{cmsPage?.heroBody || "Get a free rental estimate from local property owners and managers with more than 30 years of combined experience in the Greater Seattle area."}</p>
             <p className="mt-4 text-lg leading-8 text-brand-muted">Whether you're renting your home for the first time, comparing management options or evaluating an investment property's potential, EEE can provide practical rental-pricing guidance based on the property and current market conditions.</p>
             <h2 className="pt-5 text-2xl font-semibold text-brand-ink">Speak Directly With a Local Property Manager</h2>
             <p className="mt-3 leading-7 text-brand-muted">No call centers. No automated sales teams. Just practical guidance from experienced local property owners and managers who understand the Greater Seattle rental market.</p>
@@ -29,8 +33,8 @@ export default async function RentalEstimatePage() {
           <div className="hidden md:block">
             <PhotoPlaceholder
               compact
-              label="Estimate page photography needed"
-              requirement="EEE team member reviewing a rental home exterior, property condition, or owner-preparation checklist."
+              image={cmsPage?.heroImage}
+              slot="inspectionPhoto"
             />
           </div>
           <div className="rounded-md border border-brand-line bg-brand-mist p-5">

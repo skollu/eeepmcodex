@@ -10,6 +10,6 @@ export const teamMember = defineType({
     defineField({ name: "biography", type: "blockContent" }),
     defineField({ name: "headshot", type: "image", options: { hotspot: true }, fields: [{ name: "alt", type: "string", validation: (Rule) => Rule.required().max(160) }] }),
     defineField({ name: "displayOrder", type: "number" }),
-    defineField({ name: "published", type: "boolean", initialValue: false })
+    defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable and Publish an approved name, role, and biography. Incomplete profiles are hidden." })
   ]
 });
