@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { imageFields } from "@/schemas/imageFields";
 
 export const testimonial = defineType({
   name: "testimonial",
@@ -10,7 +11,7 @@ export const testimonial = defineType({
     defineField({ name: "customerDisplayName", type: "string" }),
     defineField({ name: "city", title: "City / Location", type: "string" }),
     defineField({ name: "propertyType", title: "Property Type", type: "string" }),
-    defineField({ name: "photograph", type: "image", options: { hotspot: true }, fields: [{ name: "alt", type: "string", validation: (Rule) => Rule.max(160) }] }),
+    defineField({ name: "photograph", type: "image", options: { hotspot: true }, description: "Optional. Authentic customer portrait with permission only; never use stock.", fields: imageFields() }),
     defineField({ name: "source", type: "string" }),
     defineField({ name: "featured", type: "boolean", initialValue: false }),
     defineField({ name: "displayOrder", type: "number" }),

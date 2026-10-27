@@ -1,6 +1,6 @@
 import { PortableText, type PortableTextBlock } from "@portabletext/react";
 import Image from "next/image";
-import { imageUrl } from "@/lib/images";
+import { imageCaption, imageUrl } from "@/lib/images";
 import { safeHref, isExternal, type CmsImage } from "@/lib/site-types";
 
 export type RichBlock = PortableTextBlock | (CmsImage & { _type: "image"; _key: string });
@@ -41,9 +41,9 @@ export function CmsContent({ value }: { value?: RichBlock[] }) {
               const src = imageUrl(value);
               return src ? (
                 <figure>
-                  <Image src={src} alt={value.alt} width={1400} height={900} className="h-auto w-full rounded-md" />
-                  {value.caption && (
-                    <figcaption className="bg-brand-evergreen p-3 text-sm text-white">{value.caption}</figcaption>
+                  <Image src={src} alt={value.alt} width={1400} height={900} sizes="(min-width: 1024px) 960px, 100vw" className="h-auto w-full rounded-md" />
+                  {imageCaption(value) && (
+                    <figcaption className="bg-brand-evergreen p-3 text-sm text-white">{imageCaption(value)}</figcaption>
                   )}
                 </figure>
               ) : null;

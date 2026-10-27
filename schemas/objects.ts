@@ -1,4 +1,5 @@
 import { defineArrayMember, defineType } from "sanity";
+import { imageFields } from "@/schemas/imageFields";
 
 export const blockContent = defineType({
   name: "blockContent",
@@ -27,10 +28,7 @@ export const blockContent = defineType({
     }),
     defineArrayMember({
       type: "image",
-      fields: [
-        { name: "alt", title: "Alt Text", type: "string", validation: (Rule) => Rule.required().max(160) },
-        { name: "caption", title: "Caption", type: "string" }
-      ],
+      fields: imageFields(),
       options: { hotspot: true }
     })
   ]

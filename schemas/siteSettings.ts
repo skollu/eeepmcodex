@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { settings } from "@/lib/content";
+import { imageFields } from "@/schemas/imageFields";
 
 export const siteSettings = defineType({
   name: "siteSettings",
@@ -24,12 +25,12 @@ export const siteSettings = defineType({
     defineField({ name: "appfolioRentalUrl", title: "AppFolio Rental URL", type: "url", initialValue: settings.appfolioRentals, validation: Rule => Rule.custom(value => !value || value === settings.appfolioRentals || "Use the approved EEE AppFolio rental destination.") }),
     defineField({ name: "appfolioOwnerPortalUrl", title: "AppFolio Owner Portal URL", type: "url", initialValue: settings.appfolioOwnerPortal, validation: Rule => Rule.custom(value => !value || value === settings.appfolioOwnerPortal || "Use the approved EEE AppFolio owner destination.") }),
     defineField({ name: "appfolioTenantPortalUrl", title: "AppFolio Tenant Portal URL", type: "url", initialValue: settings.appfolioTenantPortal, validation: Rule => Rule.custom(value => !value || value === settings.appfolioTenantPortal || "Use the approved EEE AppFolio tenant destination.") }),
-    defineField({ name: "defaultSeoImage", title: "Default SEO Image", type: "image", options: { hotspot: true }, fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })] }),
+    defineField({ name: "defaultSeoImage", title: "Default SEO Image", type: "image", options: { hotspot: true }, fields: imageFields() }),
     defineField({
       name: "photography",
       title: "Website Photography",
       type: "object",
-      fields: [["heroPhoto", "Hero Founder/Team Photo"], ["founderPhoto", "Founder/Team Portrait"], ["showingPhoto", "In-Person Showing Photo"], ["inspectionPhoto", "Property Inspection Photo"], ["maintenancePhoto", "Maintenance/Vendor Coordination Photo"], ["propertyPhoto", "Managed Property Photo"]].map(([name, title]) => defineField({ name, title, type: "image", options: { hotspot: true }, description: "Use only an approved, real EEE photograph. Missing images or alt text are hidden on the website.", fields: [defineField({ name: "alt", title: "Alt Text", type: "string", validation: Rule => Rule.required().max(160) }), defineField({ name: "caption", title: "Public Caption (Optional)", type: "string" })] }))
+      fields: [["heroPhoto", "Residential Hero Photo"], ["founderPhoto", "Authentic Founder/Team Portrait Only (Optional)"], ["showingPhoto", "Residential Interior / Showing Photo"], ["inspectionPhoto", "Property Inspection Photo (Optional)"], ["maintenancePhoto", "Maintenance Photo (Optional)"], ["propertyPhoto", "Residential Property Photo"]].map(([name, title]) => defineField({ name, title, type: "image", options: { hotspot: true }, description: "Use approved EEE photography or documented, approved stock. Stock is always labeled representative. Never imply a stock property or person belongs to EEE. Leave optional slots empty when unsuitable.", fields: imageFields() }))
     })
   ]
 });

@@ -4,6 +4,15 @@ export type CmsImage = {
   asset?: { _ref?: string };
   alt?: string;
   caption?: string;
+  sourceType?: "eee" | "stock" | "graphic";
+  sourceUrl?: string;
+  creator?: string;
+  licenseName?: string;
+  licenseUrl?: string;
+  attributionRequired?: boolean;
+  attributionText?: string;
+  rightsVerified?: boolean;
+  approvedForWebsite?: boolean;
   crop?: { top: number; bottom: number; left: number; right: number };
   hotspot?: { x: number; y: number; width: number; height: number };
 };

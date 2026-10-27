@@ -71,7 +71,7 @@ export async function PublishedTestimonials() {
           <figure key={item._id} className="rounded-md border border-brand-line p-5">
             <blockquote className="leading-8 text-brand-ink">{item.text}</blockquote>
             <figcaption className="mt-4 text-sm text-brand-muted">
-              {imageUrl(item.photograph, 120) && (
+              {item.photograph?.sourceType !== "stock" && imageUrl(item.photograph, 120) && (
                 <Image
                   src={imageUrl(item.photograph, 120)!}
                   alt={item.photograph!.alt!}
@@ -104,7 +104,7 @@ export async function PublishedTeam() {
       <div className="grid gap-6 md:grid-cols-2">
         {items.map((item) => (
           <article key={item._id} className="space-y-4">
-            {imageUrl(item.headshot, 700) && (
+            {item.headshot?.sourceType !== "stock" && imageUrl(item.headshot, 700) && (
               <Image
                 src={imageUrl(item.headshot, 700)!}
                 alt={item.headshot!.alt!}

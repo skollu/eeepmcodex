@@ -235,6 +235,22 @@ async function main() {
     assert.equal(resets, outcome === "stored" ? 1 : 0);
   }
   assert.notEqual(LeadForm({ kind: "contact" }).type, "form");
+  const { stockImageApproved, imageCaption, imageUrl } = load("lib/images.ts");
+  const stock = { sourceType: "stock", asset: { _ref: "image-abc-1600x1000-jpg" }, alt: "Residential interior", approvedForWebsite: true, rightsVerified: true, sourceUrl: "https://example.com/photo", licenseUrl: "https://example.com/license", creator: "Photographer", licenseName: "Commercial license" };
+  assert.ok(stockImageApproved(stock));
+  assert.ok(imageUrl(stock));
+  for (const key of ["approvedForWebsite", "rightsVerified", "sourceUrl", "licenseUrl", "creator", "licenseName"]) {
+    assert.equal(imageUrl({ ...stock, [key]: undefined }), undefined, key);
+  }
+  assert.equal(imageUrl({ ...stock, attributionRequired: true }), undefined);
+  assert.equal(imageUrl({ ...stock, sourceUrl: "javascript:alert(1)" }), undefined);
+  assert.match(imageCaption(stock), /Representative stock photography/);
+  const { PhotoPlaceholder } = load("components/PhotoPlaceholder.tsx");
+  response = null;
+  assert.equal(await PhotoPlaceholder({ image: stock, slot: "founderPhoto" }), null);
+  const stockHtml = renderToStaticMarkup(await PhotoPlaceholder({ image: stock }));
+  assert.match(stockHtml, /figcaption/);
+  assert.ok(!stockHtml.includes("absolute inset-x"));
   console.log(
     "PASS: CMS settings and refresh boundaries; preserved owner/tenant links; rich-text lists/marks/links; empty optional sections; approval/publication queries; unsafe URL rejection; indexing policy; form network recovery, durable-success guard, hidden honeypot, and paused default. External services mocked; no live publishing."
   );

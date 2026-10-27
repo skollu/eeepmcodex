@@ -12,6 +12,7 @@ export async function Hero({
   secondary,
   image,
   subheadline,
+  useGlobalPhoto = true,
   primaryFromCms = false
 }: {
   eyebrow?: string;
@@ -21,10 +22,11 @@ export async function Hero({
   secondary?: { label: string; href: string };
   image?: CmsImage;
   subheadline?: string;
+  useGlobalPhoto?: boolean;
   primaryFromCms?: boolean;
 }) {
   const { settings } = await getSiteData();
-  const photo = image || settings.photography?.heroPhoto;
+  const photo = image || (useGlobalPhoto ? settings.photography?.heroPhoto : undefined);
   const hasPhoto = !!imageUrl(photo);
   if (!primaryFromCms && primary?.href === "/rental-estimate") primary = { label: settings.primaryCtaLabel === "Get Free Rental Estimate" ? primary.label : settings.primaryCtaLabel, href: settings.primaryCtaDestination };
   return (

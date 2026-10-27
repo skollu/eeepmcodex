@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { imageFields } from "@/schemas/imageFields";
 
 export const blogPost = defineType({
   name: "blogPost",
@@ -13,7 +14,7 @@ export const blogPost = defineType({
     defineField({ name: "category", type: "reference", to: [{ type: "blogCategory" }] }),
     defineField({ name: "publishDate", type: "datetime" }),
     defineField({ name: "updatedDate", type: "datetime" }),
-    defineField({ name: "featuredImage", type: "image", options: { hotspot: true }, fields: [{ name: "alt", type: "string", validation: (Rule) => Rule.required().max(160) }] }),
+    defineField({ name: "featuredImage", type: "image", options: { hotspot: true }, fields: imageFields() }),
     defineField({ name: "body", type: "blockContent" }),
     defineField({ name: "relatedPosts", type: "array", of: [{ type: "reference", to: [{ type: "blogPost" }] }] }),
     defineField({ name: "relatedService", type: "reference", to: [{ type: "service" }] }),
@@ -22,7 +23,7 @@ export const blogPost = defineType({
     defineField({ name: "seoTitle", type: "string", validation: (Rule) => Rule.max(60) }),
     defineField({ name: "metaDescription", type: "text", validation: (Rule) => Rule.max(160) }),
     defineField({ name: "canonicalUrl", type: "url" }),
-    defineField({ name: "socialImage", type: "image", options: { hotspot: true } }),
+    defineField({ name: "socialImage", type: "image", options: { hotspot: true }, fields: imageFields() }),
     defineField({ name: "published", title: "Visible on Website", type: "boolean", initialValue: false, description: "Enable with Editorial Approval, complete the article, then Publish. Draft changes never appear publicly." })
   ]
 });
