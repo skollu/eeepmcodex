@@ -30,7 +30,7 @@ export default async function ContactPage() {
             <ContactCard title="Email" href={settings.emailHref} label={settings.email} />
             <ContactCard title="WhatsApp" href={settings.whatsappHref} label={settings.phone} external />
             <div className="rounded-md border border-brand-line bg-white p-5">
-              <h2 className="font-semibold text-brand-ink">Visit / Business Address</h2>
+              <h2 className="font-semibold text-brand-ink">Business Address</h2>
               <p className="mt-2 leading-7 text-brand-muted">EEE Property Management<br />{settings.address.street}<br />{settings.address.suite}<br />{settings.address.city}, {settings.address.state} {settings.address.zip}</p>
             </div>
           </div>

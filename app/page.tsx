@@ -38,22 +38,23 @@ export default async function HomePage() {
   return (
     <>
       <Hero
+        showContactNotice
         primaryFromCms={!!cmsPage?.cta?.label && !!cmsPage.cta.destination}
         image={cmsPage?.heroImage}
         subheadline={cmsPage?.heroSubheadline}
         eyebrow="Local property management for Greater Seattle owners"
         title={cmsPage?.heroHeadline || "Property Management That Protects Your Investment and Your Peace of Mind"}
-        body={cmsPage?.heroBody || "EEE Property Management helps homeowners across King, Snohomish, and Pierce counties rent and manage their properties with less stress, better communication, and responsive local support. Whether you live nearby or across the world, we help you handle the day-to-day responsibilities of your rental property with experienced local support."}
+        body={cmsPage?.heroBody || "EEE helps rental property owners across King, Snohomish, and Pierce counties handle leasing, tenant communication and day-to-day property management, whether they live nearby or manage from a distance."}
         primary={cmsPage?.cta?.label && cmsPage.cta.destination ? { label: cmsPage.cta.label, href: cmsPage.cta.destination } : { label: "Get My Free Rental Estimate", href: "/rental-estimate" }}
         secondary={{ label: "Call Us Today", href: settings.phoneHref }}
       />
       <section className="bg-white px-6 py-6">
         <div className="mx-auto max-w-7xl"><StatStrip stats={stats} /></div>
       </section>
-      <Section title="A Local Property Management Team That Actually Picks Up the Phone" tone="linen">
+      <Section title="A Local Team You Can Talk To" tone="linen">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="space-y-4 text-lg leading-8 text-brand-muted">
-            <p>Many property owners come to EEE after dealing with delayed responses, unclear reporting or management companies that made them feel like just another number.</p>
+            <p>Clear communication matters when someone else is managing your rental. EEE's approach is designed to keep owners informed about everyday decisions.</p>
             <p>At EEE Property Management, communication is designed to be simple, responsive and transparent. We treat every property with the care and attention we would expect for our own investments.</p>
             <ButtonLink href="/contact">Talk With My Property Manager</ButtonLink>
           </div>
@@ -85,11 +86,11 @@ export default async function HomePage() {
         <CardGrid items={audiences} />
         <div className="mt-8"><ButtonLink href="/switching-property-managers">See How Switching Works</ButtonLink></div>
       </Section>
-      <Section title="Built by Property Owners Who Understand What Owners Actually Need" tone="white">
+      <Section title="Built Around the Owner's Perspective" tone="white">
         <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
           <div className="space-y-4 leading-8 text-brand-muted">
-            <p>EEE Property Management was built by local real estate investors with more than 30 years of combined experience owning and managing rental properties.</p>
-            <p>We created EEE after experiencing many of the same frustrations other owners face: inconsistent communication, delayed maintenance, unclear reporting and impersonal management. Because we are owners ourselves, we understand what is at stake.</p>
+            <p>EEE Property Management is investor-owned and operated. Our team brings 30+ years of combined relevant real estate and property experience to the work.</p>
+            <p>We created EEE to provide the kind of property management experience we wanted for our own investments: clear communication, practical reporting and consistent follow-through.</p>
             <p>Our approach focuses on protecting the property, communicating clearly, addressing problems early and making ownership easier.</p>
             <PhotoPlaceholder
               compact

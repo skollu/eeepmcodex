@@ -21,18 +21,19 @@ export default async function SwitchingPage() {
   return (
     <>
       <Hero
+        showContactNotice
         primaryFromCms={!!cmsPage?.cta?.label && !!cmsPage.cta.destination}
         image={cmsPage?.heroImage}
         subheadline={cmsPage?.heroSubheadline}
         title={cmsPage?.heroHeadline || "Thinking About Switching Property Management Companies?"}
-        body={cmsPage?.heroBody || "Changing property managers can feel complicated, especially when tenants are already in place. But staying with a management company that consistently leaves you frustrated can create even more stress."}
+        body={cmsPage?.heroBody || "If you're considering a change, start by discussing your current agreement, tenant situation and property needs with EEE."}
         primary={cmsPage?.cta?.label && cmsPage.cta.destination ? { label: cmsPage.cta.label, href: cmsPage.cta.destination } : { label: "Talk With EEE About Switching", href: "/contact" }}
       />
       <Section title="Common Reasons Owners Consider Switching">
         <CardGrid items={["Slow or inconsistent communication", "Maintenance delays", "Unexpected charges", "Unclear financial reporting", "Limited follow-through", "Difficulty reaching the manager", "Impersonal service", "Concerns about property oversight"]} />
       </Section>
       <Section title="A More Responsive Management Experience" tone="white">
-        <p className="max-w-3xl text-lg leading-8 text-brand-muted">EEE focuses on direct communication, hands-on local management, transparent expectations, and an investor-owned perspective. Through this proactive approach, EEE Property Management has maintained an eviction rate of zero to date.</p>
+        <p className="max-w-3xl text-lg leading-8 text-brand-muted">EEE focuses on direct communication, hands-on local management and clear expectations throughout the management relationship.</p>
       </Section>
       <Section title="What Happens When You Switch?">
         <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

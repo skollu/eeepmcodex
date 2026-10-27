@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PublishedFAQs } from "@/components/PublishedContent";
 import { PageExtras } from "@/components/PageExtras";
 import { Section } from "@/components/Section";
+import { ContactGuidance } from "@/components/ContactGuidance";
 import { faqs } from "@/lib/content";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
 
@@ -10,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(page, {
     path: "/owner-faq",
     title: "Owner FAQ",
-    description: "Property management questions answered for Greater Seattle rental property owners."
+    description: "Have questions about your Greater Seattle rental property? Call or email EEE to discuss management services and next steps."
   });
 }
 
@@ -32,7 +33,7 @@ export default async function OwnerFaqPage() {
   const cmsPage = await getCmsPage("owner-faq");
 
   return (
-    <Section headingLevel={1} title={cmsPage?.heroHeadline || "Property Management Questions, Answered"}>
+    <Section headingLevel={1} title={cmsPage?.heroHeadline || "Questions About Managing Your Rental?"}>
       {cmsPage?.heroBody && <p className="mb-4 leading-8 text-brand-muted">{cmsPage.heroBody}</p>}
       <PageExtras page={cmsPage} />
       <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -40,7 +41,7 @@ export default async function OwnerFaqPage() {
           <div className="rounded-md border border-brand-line bg-white p-4 text-sm font-semibold text-brand-forest" key={category}>{category}</div>
         ))}
       </div>
-      <PublishedFAQs page="owner-faq" fallback={[...faqs, ...moreFaqs]} />
+      <PublishedFAQs page="owner-faq" fallback={[...faqs, ...moreFaqs]} emptyState={<ContactGuidance intro="No FAQ answers are currently published. Online submissions are temporarily paused." />} />
     </Section>
   );
 }

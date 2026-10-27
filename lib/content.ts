@@ -47,9 +47,9 @@ export const navItems = [
 ];
 
 export const stats = [
-  ["30+ Years", "Combined Experience"],
+  ["30+ Years", "Combined Relevant Team Experience"],
   ["Investor-Owned", "& Operated"],
-  ["0 Evictions", "To Date"],
+  ["0 Eviction Filings to Date", "No eviction cases have been filed for properties managed by EEE since the company began operations.", "EEE-managed properties only, as of October 2026. Historical results do not guarantee future outcomes."],
   ["3 Counties", "Served"],
   ["Hands-On", "Local Management"]
 ] as const;
@@ -74,11 +74,11 @@ export const serviceDetails = [
   ["In-Person Showings", "EEE emphasizes personal property showings rather than relying exclusively on unattended self-tour access."],
   ["Applicant Screening", "Applicants are reviewed through consistently applied, lawful screening procedures."],
   ["Lease Coordination", "EEE helps coordinate leasing details, documentation, and move-in steps."],
-  ["Rent Collection", "Ongoing rent collection is handled through a managed process designed to keep owners informed."],
+  ["Rent Collection", "EEE handles rent collection and keeps owners informed about payment activity."],
   ["Owner Reporting", "Owners receive clear reporting and communication about property activity."],
   ["Maintenance Coordination", "Maintenance is coordinated with attention to timely resolution, vendor relationships, and cost-conscious decision-making."],
   ["Property Inspections", "In-person property inspections help owners understand condition and identify issues early."],
-  ["Lease Renewals", "Renewal conversations are handled with practical guidance and documentation support."],
+  ["Lease Renewals", "EEE helps coordinate renewal discussions and related documentation."],
   ["Tenant Communication", "EEE manages everyday resident communication professionally and consistently."],
   ["Home Warranty Coordination", "Where applicable, EEE can coordinate service needs with an owner's home-warranty provider."],
   ["Out-of-State Owner Support", "Remote owners receive local oversight and responsive communication from people who understand the area."]
@@ -88,7 +88,7 @@ export const faqs = [
   ["What areas does EEE Property Management serve?", "EEE serves property owners throughout King, Snohomish, and Pierce counties, including the Greater Seattle area."],
   ["What types of properties does EEE manage?", "EEE manages single-family homes, luxury single-family homes, and small multifamily properties."],
   ["Does EEE work with out-of-state owners?", "Yes. EEE supports owners who live outside the area, including owners outside Washington and outside the United States."],
-  ["How do I find out what my property could rent for?", "Start with the free rental estimate form. EEE will review your property information and contact you with practical next steps."],
+  ["How do I find out what my property could rent for?", "EEE offers free rental estimates. Online submissions are temporarily paused. Call or email EEE to discuss your property and practical next steps."],
   ["Can I switch property managers if I already have tenants?", "Often, yes, but the right process depends on your current agreement and property situation. EEE can discuss the general transition steps with you."],
   ["How does EEE communicate with owners?", "Owners can communicate directly with EEE by phone, email, and WhatsApp, with a focus on timely, clear updates."]
 ] as const;

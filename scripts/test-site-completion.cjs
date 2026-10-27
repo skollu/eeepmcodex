@@ -108,6 +108,8 @@ async function main() {
   assert.equal(await published.PublishedTestimonials(), null);
   assert.equal(await published.PublishedTeam(), null);
   assert.equal(await published.PublishedFAQs({}), null);
+  const faqEmpty = React.createElement("p", null, "No FAQ answers are currently published.");
+  assert.equal(await published.PublishedFAQs({ emptyState: faqEmpty }), faqEmpty);
   assert.ok(calls.some((query) => query.includes("approvedForWebsite == true")));
   response = [
     {
@@ -235,6 +237,24 @@ async function main() {
     assert.equal(resets, outcome === "stored" ? 1 : 0);
   }
   assert.notEqual(LeadForm({ kind: "contact" }).type, "form");
+  assert.notEqual(LeadForm({ kind: "rental-estimate" }).type, "form");
+  const approvedStats = load("lib/content.ts").stats;
+  assert.deepEqual(approvedStats.find(([title]) => title === "0 Eviction Filings to Date"), [
+    "0 Eviction Filings to Date",
+    "No eviction cases have been filed for properties managed by EEE since the company began operations.",
+    "EEE-managed properties only, as of October 2026. Historical results do not guarantee future outcomes."
+  ]);
+  const statsHtml = renderToStaticMarkup(React.createElement(load("components/Cards.tsx").StatStrip, { stats: approvedStats }));
+  for (const text of approvedStats.find(([title]) => title === "0 Eviction Filings to Date")) assert.ok(statsHtml.includes(text));
+  assert.ok(statsHtml.includes("Combined Relevant Team Experience"));
+  assert.ok(!JSON.stringify(approvedStats).includes("0 Evictions"));
+  response = null;
+  const guidance = renderToStaticMarkup(await load("components/ContactGuidance.tsx").ContactGuidance({}));
+  assert.match(guidance, /temporarily paused/);
+  assert.match(guidance, /href="tel:/);
+  assert.match(guidance, /href="mailto:/);
+  assert.ok(!fs.readFileSync(path.join(root, "app/switching-property-managers/page.tsx"), "utf8").includes("eviction rate"));
+  assert.ok(!JSON.stringify(load("lib/content.ts").faqs).includes("free rental estimate form"));
   const { stockImageApproved, imageCaption, imageUrl } = load("lib/images.ts");
   const stock = { sourceType: "stock", asset: { _ref: "image-abc-1600x1000-jpg" }, alt: "Residential interior", approvedForWebsite: true, rightsVerified: true, sourceUrl: "https://example.com/photo", licenseUrl: "https://example.com/license", creator: "Photographer", licenseName: "Commercial license" };
   assert.ok(stockImageApproved(stock));

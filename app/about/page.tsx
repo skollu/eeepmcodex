@@ -22,6 +22,7 @@ export default async function AboutPage() {
   return (
     <>
       <Hero
+        showContactNotice
         useGlobalPhoto={false}
         primaryFromCms={!!cmsPage?.cta?.label && !!cmsPage.cta.destination}
         image={cmsPage?.heroImage}
@@ -31,7 +32,7 @@ export default async function AboutPage() {
         primary={cmsPage?.cta?.label && cmsPage.cta.destination ? { label: cmsPage.cta.label, href: cmsPage.cta.destination } : { label: "Talk With Our Team", href: "/contact" }}
       />
       <Section title="Why We Started EEE Property Management">
-        <p className="max-w-3xl text-lg leading-8 text-brand-muted">After years of owning and managing rental properties, we saw many of the same frustrations repeated throughout the property-management experience. Owners struggled with delayed communication, unclear reporting, unexpected charges, poor follow-through and managers who felt disconnected from the owner's actual priorities. We created EEE to provide the kind of property management experience we wanted for our own investments.</p>
+        <p className="max-w-3xl text-lg leading-8 text-brand-muted">We created EEE to provide the kind of property management experience we wanted for our own investments: clear communication, practical reporting and consistent follow-through.</p>
       </Section>
       <Section title="Ethics. Efficiency. Expertise." tone="white">
         <div className="grid gap-8 md:grid-cols-3">
@@ -47,7 +48,7 @@ export default async function AboutPage() {
         </div>
       </Section>
       <Section title="Owners Managing for Owners">
-        <p className="max-w-3xl text-lg leading-8 text-brand-muted">EEE's investor-owner perspective shapes the way we think about communication, property condition, expenses, and long-term value. The team brings more than 30 years of combined real estate and property experience to everyday decisions.</p>
+        <p className="max-w-3xl text-lg leading-8 text-brand-muted">EEE is investor-owned and operated. Our team brings 30+ years of combined relevant real estate and property experience to everyday decisions. That owner perspective shapes how we think about communication, property condition, expenses and long-term value.</p>
       </Section>
       <Section title="Hands-On by Design" tone="white">
         <p className="max-w-3xl text-lg leading-8 text-brand-muted">EEE emphasizes direct owner communication, in-person showings, in-person inspections, maintenance coordination, and proactive problem solving.</p>

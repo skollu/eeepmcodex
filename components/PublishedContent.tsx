@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { cmsFetch } from "@/lib/cms";
 import { faqs } from "@/lib/content";
 import { CmsContent, type RichBlock } from "@/components/CmsContent";
@@ -9,17 +10,19 @@ import type { CmsImage } from "@/lib/site-types";
 export async function PublishedFAQs({
   page = "home",
   fallback = faqs,
-  section = false
+  section = false,
+  emptyState
 }: {
   page?: string;
   fallback?: readonly (readonly [string, string])[];
   section?: boolean;
+  emptyState?: ReactNode;
 }) {
   const items = await cmsFetch<Array<{ _id: string; question: string; category?: string; answer: RichBlock[] }>>(
     `*[_type == "faq" && published == true && defined(question) && count(answer)>0 && (!defined(relatedPage) || relatedPage->slug.current == $page)] | order(displayOrder asc, _createdAt asc){_id,question,category,answer}`,
     { page }
   );
-  if (items?.length === 0) return null;
+  if (items?.length === 0) return emptyState ?? null;
   const content = (
     <div className="divide-y divide-brand-line rounded-md border border-brand-line bg-white">
       {items

@@ -4,16 +4,18 @@ import { Section } from "@/components/Section";
 import { getBlogPosts } from "@/lib/blog";
 import { getCmsPage, pageMetadata } from "@/lib/pages";
 import { PageExtras } from "@/components/PageExtras";
+import { ContactGuidance } from "@/components/ContactGuidance";
 
-export async function generateMetadata(): Promise<Metadata> { return pageMetadata(await getCmsPage("blog"), { title: "Blog", description: "Property management resources for Greater Seattle owners.", path: "/blog" }); }
+export async function generateMetadata(): Promise<Metadata> { return pageMetadata(await getCmsPage("blog"), { title: "Blog", description: (await getBlogPosts()).length ? "Property management resources for Greater Seattle owners." : "Have a question about managing a rental property in Greater Seattle? Contact EEE by phone or email.", path: "/blog" }); }
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
   const cmsPage = await getCmsPage("blog");
 
   return (
-    <Section headingLevel={1} title={cmsPage?.heroHeadline || "Property Management Resources for Greater Seattle Owners"}>
-      <p className="mb-8 max-w-3xl text-lg leading-8 text-brand-muted">{cmsPage?.heroBody || "Practical guidance, rental-market insights and property-management resources for homeowners and real estate investors."}</p>
+    <Section headingLevel={1} title={cmsPage?.heroHeadline || (posts.length ? "Property Management Resources for Greater Seattle Owners" : "EEE Property Management Blog")}>
+      <p className="mb-8 max-w-3xl text-lg leading-8 text-brand-muted">{cmsPage?.heroBody || (posts.length ? "Practical guidance and property-management resources for rental owners." : "No articles are currently published.")}</p>
+      {!posts.length && <ContactGuidance intro="Online submissions are temporarily paused." />}
       <PageExtras page={cmsPage} />
       {!!posts.length && <div className="mb-8 flex flex-wrap gap-3">
         {[...new Set(posts.map(post => post.category))].map((category) => (

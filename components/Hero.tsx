@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/ButtonLink";
+import { ContactGuidance } from "@/components/ContactGuidance";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import { getSiteData } from "@/lib/cms";
 import { imageUrl } from "@/lib/images";
@@ -13,6 +14,7 @@ export async function Hero({
   image,
   subheadline,
   useGlobalPhoto = true,
+  showContactNotice = false,
   primaryFromCms = false
 }: {
   eyebrow?: string;
@@ -23,6 +25,7 @@ export async function Hero({
   image?: CmsImage;
   subheadline?: string;
   useGlobalPhoto?: boolean;
+  showContactNotice?: boolean;
   primaryFromCms?: boolean;
 }) {
   const { settings } = await getSiteData();
@@ -43,6 +46,7 @@ export async function Hero({
               {secondary && <ButtonLink href={secondary.href} variant="secondary">{secondary.label}</ButtonLink>}
             </div>
           )}
+          {showContactNotice && <ContactGuidance />}
           <div className="mt-8 grid max-w-2xl gap-3 text-sm font-semibold text-brand-ink sm:grid-cols-3">
             <span className="rounded-md border border-brand-line bg-white/80 px-4 py-3">Direct owner communication</span>
             <span className="rounded-md border border-brand-line bg-white/80 px-4 py-3">In-person local support</span>
